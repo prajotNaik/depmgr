@@ -1,0 +1,217 @@
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch
+		http://www.springframework.org/schema/batch/spring-batch-3.0.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
+
+	<import resource="../config/context.xml" />
+	<import resource="../config/datasource.xml" />
+	<bean id="depSetup"
+		class="com.pjt.tasklets.DependencySetupTasklet">
+		<property name="dependencies" ref="dependencies"></property>
+		<property name="dependencyMet" ref="dependencyMet"></property>
+		<property name="environmentVariableForStepNames" value="stepName"></property>
+	</bean>
+
+	<bean id="parentTaskGreeting" class="java.util.ArrayList"/>
+	
+	<bean id="greeting1"
+		class="com.pjt.tasklets.DependentCustomGreetingTasklet">
+		<property name="taskGreeting" value="FirstTask"></property>
+		<property name="parentTaskGreeting" ref="parentTaskGreeting"/>
+	</bean>
+
+	<bean id="greeting2"
+		class="com.pjt.tasklets.CustomGreetingTasklet">
+		<property name="parentTaskGreeting" ref="parentTaskGreeting"/>
+	</bean>
+
+	<bean id="greeting3"
+		class="com.pjt.tasklets.CustomGreetingTasklet">
+		<property name="parentTaskGreeting" ref="parentTaskGreeting"/>
+	</bean>
+
+	<bean id="greeting"
+		class="com.pjt.tasklets.CustomGreetingTasklet">
+	</bean>
+
+	<bean id="dependencyMet"
+		class="java.util.concurrent.ConcurrentHashMap" />
+	<bean id="dependencies"
+		class="java.util.concurrent.ConcurrentHashMap" />
+
+	<batch:job id="myjob">
+		<batch:step id="setupDependency" next="nodes">
+			<batch:tasklet ref="depSetup" />
+		</batch:step>
+		<batch:split id="nodes" task-executor="taskExecutor">
+			<batch:flow>
+				<batch:step id="step1">
+					<batch:tasklet ref="greeting1">
+					</batch:tasklet>
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="step2">
+					<batch:tasklet ref="greeting2">
+					</batch:tasklet>
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="step3">
+					<batch:tasklet ref="greeting3">
+					</batch:tasklet>
+				</batch:step>
+			</batch:flow>
+			<batch:flow>
+				<batch:step id="step4">
+					<batch:tasklet ref="greeting">
+					</batch:tasklet>
+				</batch:step>
+			</batch:flow>
+			<!-- <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> -->
+<batch:flow><batch:step id="step5"> <batch:tasklet ref="greeting">  </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step6"> <batch:tasklet ref="greeting">  </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step7"> <batch:tasklet ref="greeting">  </batch:tasklet> </batch:step> </batch:flow> 
+<!-- <batch:flow><batch:step id="step8"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step9"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step10"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step11"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step12"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step13"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step14"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step15"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step16"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step17"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step18"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step19"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step20"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step21"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step22"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step23"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step24"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step25"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step26"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step27"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step28"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step29"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step30"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step31"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step32"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step33"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step34"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step35"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step36"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step37"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step38"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step39"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step40"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step41"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step42"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step43"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step44"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step45"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step46"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step47"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step48"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step49"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step50"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step51"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step52"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step53"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step54"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step55"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step56"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step57"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step58"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step59"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step60"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step61"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step62"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step63"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step64"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step65"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step66"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step67"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step68"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step69"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step70"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step71"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step72"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step73"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step74"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step75"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step76"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step77"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step78"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step79"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step80"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step81"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step82"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step83"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step84"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step85"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step86"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step87"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step88"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step89"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step90"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step91"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step92"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step93"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step94"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step95"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step96"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step97"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step98"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step99"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step100"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step101"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step102"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step103"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step104"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step105"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step106"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step107"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step108"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step109"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step110"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step111"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step112"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step113"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step114"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step115"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step116"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step117"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step118"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step119"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step120"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step121"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step122"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step123"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step124"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step125"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step126"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step127"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step128"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step129"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step130"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step131"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step132"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+<batch:flow><batch:step id="step133"> <batch:tasklet ref="greeting"> <batch:listeners> <batch:listener ref="dependencyListener" /> </batch:listeners> </batch:tasklet> </batch:step> </batch:flow> 
+ -->
+		</batch:split>
+	</batch:job>
+
+	<bean id="taskExecutor"
+		class="org.springframework.core.task.SimpleAsyncTaskExecutor" />
+	<bean id="dependencyListener"
+		class="com.pjt.listeners.DependencyListener">
+		<property name="dependencies" ref="dependencies"></property>
+		<property name="dependencyMet" ref="dependencyMet"></property>
+	</bean>
+
+</beans>
